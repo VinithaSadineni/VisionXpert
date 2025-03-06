@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - FoodBridge</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .event-details {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .event-details h1 {
+            color: #FF416C;
+        }
+        .event-details .date {
+            font-weight: 600;
+            color: #FF4B2B;
+        }
+        .event-details .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #FF416C;
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        .event-details .btn:hover {
+            background: #FF4B2B;
+        }
+    </style>
+</head>
+<body>
+    <div class="event-details">
+        <h1 id="eventTitle">Event Title</h1>
+        <p class="date" id="eventDate">Date: October 25, 2023</p>
+        <P> <A href="event2.html"  id="eventDescription">Event description goes here.</p></A>
+        <a href="event2.html" class="btn" id="eventRegister">Register Now</a>
+    </div>
+
+    <script>
+        // Fetch event details from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById('eventTitle').innerText = urlParams.get('title');
+        document.getElementById('eventDate').innerText = `Date: ${urlParams.get('date')}`;
+        document.getElementById('eventDescription').innerText = urlParams.get('description');
+        document.getElementById('eventRegister').setAttribute('href', urlParams.get('registerLink'));
+    </script>
+</body>
+</html>
