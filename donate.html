@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Food - FoodBridge</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 90%;
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .logo-icon {
+            margin-right: 8px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffe66d;
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .hero-btn {
+            background: linear-gradient(135deg, #ff6b6b, #e63946);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hero-btn:hover {
+            background: linear-gradient(135deg, #e63946, #ff6b6b);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ff6b6b, 0 0 30px #e63946;
+        }
+
+        /* Donate Food Section */
+        .donate-food {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .donate-food::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #ff6b6b, #e63946);
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        .donate-food:hover {
+            transform: scale(1.02);
+        }
+
+        .donate-food h1 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            color: white;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        input::placeholder, select {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:invalid:focus, select:invalid:focus {
+            border: 2px solid red;
+        }
+
+        /* Button Styling */
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b6b, #e63946);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #e63946, #ff6b6b);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ff6b6b, 0 0 30px #e63946;
+        }
+
+        /* Success Message */
+        #successMessage {
+            display: none;
+            font-size: 16px;
+            color: #ffe66d;
+            margin-top: 15px;
+            font-weight: bold;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Loading Spinner */
+        #loadingSpinner {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #loadingSpinner .fa-spinner {
+            font-size: 24px;
+            color: #ffe66d;
+        }
+
+        /* Donation Stats */
+        .donation-stats {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .donation-stats span {
+            color: #ffe66d;
+        }
+
+        /* Progress Bar */
+        progress {
+            width: 50%;
+            height: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            display: block;
+            margin: 20px auto;
+        }
+
+        progress::-webkit-progress-value {
+            background: linear-gradient(135deg, #ff6b6b, #e63946);
+            border-radius: 10px;
+        }
+
+        /* Impact Section */
+        .impact {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .impact h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .impact p {
+            font-size: 18px;
+        }
+
+        /* Testimonial Carousel */
+        .testimonial-section {
+            width: 80%;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        .testimonial-carousel {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .testimonial {
+            display: inline-block;
+            width: 100%;
+            font-size: 18px;
+            padding: 20px;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-controls {
+            margin-top: 10px;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .leaderboard h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .leaderboard ul {
+            list-style: none;
+        }
+
+        .leaderboard li {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 50px;
+            text-align: center;
+            border-radius: 10px;
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        footer a {
+            color: #ffe66d;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        footer a:hover {
+            color: #ff6b6b;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .nav-links {
+                margin-top: 10px;
+                flex-direction: column;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .donate-food {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-utensils logo-icon"></i>
+            <span>FoodBridge</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="footer.html">Home</a></li>
+            <li><a href="donate.html" class="active">Donate Food</a></li>
+            <li><a href="ABOUT.HTML">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Fight Hunger, Share Hope</h1>
+            <p>Turn surplus food into meals for those in need—donate today!</p>
+            <button class="hero-btn" aria-label="Scroll to Donate">Donate Now</button>
+        </div>
+    </section>
+
+    <!-- Countdown Timer -->
+    <div class="donation-stats" id="countdown">Goal: 100 kg in 7 days</div>
+
+    <!-- Donate Food Section -->
+    <section class="donate-food">
+        <h1>Donate Food Now</h1>
+        <p>Your contribution can feed someone today.</p>
+        <form id="donateForm">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+
+            <label for="contact">Contact Number:</label>
+            <input type="tel" id="contact" placeholder="10-digit number" pattern="[0-9]{10}" required>
+
+            <label for="food-type">Food Type:</label>
+            <select id="food-type" required>
+                <option value="">Select food type</option>
+                <option value="Rice">Rice</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Bread">Bread</option>
+            </select>
+
+            <label for="quantity">Quantity (kg):</label>
+            <input type="number" id="quantity" placeholder="e.g., 5" min="0.1" step="0.1" required>
+
+            <label for="location">Pickup Location:</label>
+            <input type="text" id="location" placeholder="Enter address" required>
+
+            <button type="submit" class="submit-btn" aria-label="Submit Donation">Donate</button>
+        </form>
+        <p id="successMessage">Thank you! Your donation is being processed.</p>
+        <div id="loadingSpinner">
+            <i class="fas fa-spinner fa-spin"></i> Processing...
+        </div>
+    </section>
+
+    <!-- Donation Stats -->
+    <div class="donation-stats">
+        Total Donated: <span id="totalDonated">0</span> kg
+    </div>
+    <progress id="donationProgress" value="0" max="100"></progress>
+
+    <!-- Impact Section -->
+    <section class="impact">
+        <h2>Your Impact</h2>
+        <p>Meals Created: <span id="meals">0</span> | People Helped: <span id="people">0</span></p>
+    </section>
+
+    <!-- Testimonial Section -->
+    <div class="testimonial-section">
+        <h2>What Donors Say</h2>
+        <div class="testimonial-carousel" id="testimonialCarousel">
+            <div class="testimonial">"Donating 5 kg of rice felt amazing!"</div>
+            <div class="testimonial">"So easy to help—love FoodBridge!"</div>
+            <div class="testimonial">"A small act made a big difference."</div>
+        </div>
+        <div class="carousel-controls">
+            <button id="prevBtn" aria-label="Previous Testimonial">Prev</button>
+            <button id="nextBtn" aria-label="Next Testimonial">Next</button>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <section class="leaderboard">
+        <h2>Top Donors</h2>
+        <ul id="leaderboardList"></ul>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 FoodBridge | <a href="privacy.html">Privacy Policy</a> | "Real-time hunger relief, one donation at a time."</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Elements
+            const form = document.getElementById("donateForm");
+            const successMessage = document.getElementById("successMessage");
+            const loadingSpinner = document.getElementById("loadingSpinner");
+            const totalDonated = document.getElementById("totalDonated");
+            const donationProgress = document.getElementById("donationProgress");
+            const meals = document.getElementById("meals");
+            const people = document.getElementById("people");
+            const countdown = document.getElementById("countdown");
+            const leaderboardList = document.getElementById("leaderboardList");
+            const testimonials = document.querySelectorAll(".testimonial");
+            const totalTestimonials = testimonials.length;
+            let currentTestimonial = 0;
+            let totalKg = 0;
+            let donors = [];
+
+            // Scroll to Donate
+            document.querySelector(".hero-btn").addEventListener("click", () => {
+                document.querySelector(".donate-food").scrollIntoView({ behavior: "smooth" });
+            });
+
+            // Form Submission
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                const name = document.getElementById("name").value.trim();
+                const quantity = parseFloat(document.getElementById("quantity").value);
+
+                loadingSpinner.style.display = "block";
+                setTimeout(() => {
+                    loadingSpinner.style.display = "none";
+                    successMessage.style.display = "block";
+                    totalKg += quantity;
+                    updateStats();
+                    updateLeaderboard(name, quantity);
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    form.reset();
+                    setTimeout(() => successMessage.style.display = "none", 3000);
+                }, 1500);
+            });
+
+            // Real-Time Donation Simulation
+            setInterval(() => {
+                const randomKg = Math.random() * 3;
+                totalKg += randomKg;
+                updateStats();
+                updateLeaderboard(`Anonymous #${Math.floor(Math.random() * 100)}`, randomKg);
+            }, 15000);
+
+            // Update Stats
+            function updateStats() {
+                totalDonated.textContent = totalKg.toFixed(1);
+                donationProgress.value = Math.min(totalKg, 100);
+                meals.textContent = Math.floor(totalKg * 2);
+                people.textContent = Math.floor(totalKg / 2);
+                if (totalKg >= 50 && totalKg < 51) {
+                    alert("Milestone: 50 kg donated!");
+                }
+            }
+
+            // Countdown Timer
+            const goalDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime();
+            const timer = setInterval(() => {
+                const now = Date.now();
+                const timeLeft = goalDate - now;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    countdown.textContent = "Goal Reached!";
+                    return;
+                }
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                countdown.innerHTML = `Goal: 100 kg in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }, 1000);
+
+            // Testimonial Carousel
+            function updateCarousel() {
+                document.getElementById("testimonialCarousel").style.transform = `translateX(${-currentTestimonial * 100}%)`;
+            }
+
+            document.getElementById("nextBtn").addEventListener("click", () => {
+                currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+                updateCarousel();
+            });
+
+            document.getElementById("prevBtn").addEventListener("click", () => {
+                currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
+                updateCarousel();
+            });
+
+            let autoPlay = setInterval(() => {
+                currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+                updateCarousel();
+            }, 3000);
+
+            document.getElementById("testimonialCarousel").addEventListener("mouseenter", () => clearInterval(autoPlay));
+            document.getElementById("testimonialCarousel").addEventListener("mouseleave", () => {
+                autoPlay = setInterval(() => {
+                    currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+                    updateCarousel();
+                }, 3000);
+            });
+
+            // Leaderboard
+            function updateLeaderboard(name, quantity) {
+                donors.push({ name, quantity });
+                donors.sort((a, b) => b.quantity - a.quantity);
+                donors = donors.slice(0, 5); // Top 5 donors
+                leaderboardList.innerHTML = donors.map(d => `<li>${d.name}: ${d.quantity.toFixed(1)} kg</li>`).join("");
+            }
+        });
+    </script>
+</body>
+</html>

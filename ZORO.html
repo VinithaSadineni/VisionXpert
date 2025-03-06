@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Service Volunteer Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(84, 160, 255, 0.1));
+            z-index: -1;
+        }
+
+        .backdrop-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .progress-container {
+            margin-top: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #ff6b6b;
+            border-radius: 3px;
+            width: 0;
+            transition: width 0.5s ease;
+        }
+
+        .progress-glow {
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 100%;
+            height: 16px;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.3) 0%, transparent 70%);
+            opacity: 0.5;
+        }
+
+        .step-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            color: #ff6b6b;
+            font-weight: 500;
+        }
+
+        .form-section {
+            display: none;
+            padding: 1rem;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: #555;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-group label i {
+            margin-right: 0.5rem;
+            color: #ff6b6b;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .role-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .role-card {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card.active {
+            border-color: var(--role-color);
+            background: rgba(var(--role-color), 0.1);
+        }
+
+        .role-card i {
+            font-size: 1.5rem;
+            color: var(--role-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .role-hover-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 107, 107, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .role-card:hover .role-hover-effect {
+            opacity: 1;
+        }
+
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .chip {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chip.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+
+        .availability-calendar {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .cal-header {
+            display: grid;
+            grid-template-columns: 60px repeat(3, 1fr);
+            text-align: center;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .cal-row {
+            display: grid;
+            grid-template-columns: 60px repeat(3, 1fr);
+            align-items: center;
+        }
+
+        .day-label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .cal-cell {
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .cal-cell.selected {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        .cal-cell input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .next-btn, .submit-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .prev-btn {
+            background: #eee;
+            color: #555;
+        }
+
+        .submit-btn.loading .btn-text {
+            visibility: hidden;
+        }
+
+        .submit-btn.loading .btn-loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .success-icon, .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-icon { color: #00cc00; }
+        .error-icon { color: #ff4444; }
+
+        .celebration {
+            position: relative;
+        }
+
+        #celebrationCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .social-share {
+            margin: 1.5rem 0;
+        }
+
+        .share-btn {
+            background: #1da1f2;
+            color: white;
+        }
+
+        .action-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+        }
+
+        .notification.error {
+            background: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="backdrop">
+        <div class="backdrop-particles"></div>
+    </div>
+    <div class="container">
+        <div class="form-header">
+            <h2>Food Service Volunteer Registration</h2>
+            <p class="tagline">Embark on a Journey to Transform Lives Through Food</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                    <div class="progress-glow"></div>
+                </div>
+                <div class="step-indicators">
+                    <span class="step" data-step="1"><i class="fas fa-user"></i> Personal</span>
+                    <span class="step" data-step="2"><i class="fas fa-heart"></i> Preferences</span>
+                    <span class="step" data-step="3"><i class="fas fa-calendar"></i> Availability</span>
+                </div>
+            </div>
+        </div>
+        
+        <form id="volunteerForm">
+            <div class="form-sections">
+                <div class="form-section active" id="section1">
+                    <h3>Personal Information</h3>
+                    <div class="input-group animated-input">
+                        <label for="name"><i class="fas fa-user"></i> Full Name:</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                    </div>
+                    <div class="input-group animated-input">
+                        <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    </div>
+                    <div class="input-group animated-input">
+                        <label for="phone"><i class="fas fa-phone"></i> Phone:</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="(123) 456-7890">
+                    </div>
+                    <button type="button" class="next-btn" onclick="formManager.nextSection(1)">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="form-section" id="section2">
+                    <h3>Food Service Preferences</h3>
+                    <div class="input-group role-selector">
+                        <label>Preferred Roles:</label>
+                        <div class="role-cards" id="roleCards"></div>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-leaf"></i> Dietary Specialties:</label>
+                        <div class="chip-container" id="dietaryChips">
+                            <div class="chip" data-value="vegan">Vegan</div>
+                            <div class="chip" data-value="vegetarian">Vegetarian</div>
+                            <div class="chip" data-value="gluten-free">Gluten-Free</div>
+                            <div class="chip" data-value="halal">Halal</div>
+                            <div class="chip" data-value="kosher">Kosher</div>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="prev-btn" onclick="formManager.prevSection(2)">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="next-btn" onclick="formManager.nextSection(2)">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-section" id="section3">
+                    <h3>Availability & Additional Info</h3>
+                    <div class="input-group">
+                        <label><i class="fas fa-calendar"></i> Availability:</label>
+                        <div class="availability-calendar" id="availabilityCalendar"></div>
+                    </div>
+                    <div class="input-group animated-input">
+                        <label for="certifications"><i class="fas fa-certificate"></i> Certifications:</label>
+                        <textarea id="certifications" name="certifications" placeholder="List any food safety certifications..."></textarea>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="prev-btn" onclick="formManager.prevSection(3)">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span class="btn-text">Submit Registration</span>
+                            <span class="btn-loader"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        <div id="success-modal" class="modal hidden">
+            <div class="modal-content success">
+                <div class="celebration">
+                    <canvas id="celebrationCanvas"></canvas>
+                    <div class="success-icon"><i class="fas fa-check"></i></div>
+                    <h3>Welcome to the Team!</h3>
+                    <p class="success-details"></p>
+                    <div class="social-share">
+                        <button class="share-btn" onclick="shareOnTwitter()">
+                            <i class="fab fa-twitter"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-modal" class="modal hidden">
+            <div class="modal-content error">
+                <div class="error-icon"><i class="fas fa-exclamation"></i></div>
+                <h3>Oops! Something Went Wrong</h3>
+                <p class="error-details"></p>
+                <button onclick="closeError()" class="action-btn retry">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class VolunteerFormManager {
+            constructor() {
+                this.currentSection = 1;
+                this.formData = {};
+                this.registeredEmails = []; // Array to store registered emails
+                this.registeredPhones = []; // Array to store registered phone numbers
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderRoleCards();
+                this.renderAvailabilityCalendar();
+                this.setupDietaryChips();
+                this.updateProgress();
+                this.animateOnLoad();
+                this.setupBackgroundParticles();
+            }
+
+            setupEventListeners() {
+                document.getElementById('volunteerForm').addEventListener('submit', (e) => this.handleSubmit(e));
+                document.querySelectorAll('.step').forEach(step => {
+                    step.addEventListener('click', () => this.jumpToSection(parseInt(step.dataset.step)));
+                });
+                document.querySelectorAll('.animated-input input, .animated-input textarea').forEach(input => {
+                    input.addEventListener('focus', () => this.animateInputFocus(input));
+                });
+            }
+
+            animateOnLoad() {
+                gsap.from('.container', { duration: 1, y: 100, opacity: 0, ease: 'power3.out' });
+                gsap.from('.form-header', { duration: 1, y: -30, opacity: 0, delay: 0.3 });
+                gsap.from('.form-section.active .input-group', { 
+                    duration: 0.8, 
+                    y: 20, 
+                    opacity: 0, 
+                    stagger: 0.2, 
+                    delay: 0.5 
+                });
+            }
+
+            animateInputFocus(input) {
+                gsap.to(input.parentElement, {
+                    scale: 1.02,
+                    boxShadow: '0 0 15px rgba(255,107,107,0.3)',
+                    duration: 0.3
+                });
+                input.addEventListener('blur', () => {
+                    gsap.to(input.parentElement, {
+                        scale: 1,
+                        boxShadow: 'none',
+                        duration: 0.3
+                    });
+                }, { once: true });
+            }
+
+            updateProgress() {
+                const progress = (this.currentSection / 3) * 100;
+                gsap.to('#progress', { width: `${progress}%`, duration: 0.5, ease: 'power2.inOut' });
+                document.querySelectorAll('.step').forEach((step, index) => {
+                    step.classList.toggle('active', index + 1 <= this.currentSection);
+                    gsap.to(step, {
+                        scale: index + 1 <= this.currentSection ? 1.1 : 1,
+                        duration: 0.3
+                    });
+                });
+            }
+
+            async nextSection(current) {
+                if (!this.validateSection(current)) return;
+                await this.transitionSection(current, current + 1);
+            }
+
+            async prevSection(current) {
+                await this.transitionSection(current, current - 1);
+            }
+
+            async jumpToSection(section) {
+                if (section > this.currentSection && !this.validateSection(this.currentSection)) return;
+                await this.transitionSection(this.currentSection, section);
+            }
+
+            async transitionSection(from, to) {
+                const fromSection = document.getElementById(`section${from}`);
+                const toSection = document.getElementById(`section${to}`);
+                
+                await gsap.to(fromSection, { 
+                    opacity: 0, 
+                    x: from > to ? 100 : -100, 
+                    duration: 0.4,
+                    ease: 'power2.in'
+                });
+                fromSection.classList.remove('active');
+                
+                toSection.style.opacity = '0';
+                toSection.style.transform = `translateX(${from > to ? -100 : 100}px)`;
+                toSection.classList.add('active');
+                
+                await gsap.to(toSection, { 
+                    opacity: 1, 
+                    x: 0, 
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+                
+                gsap.from(toSection.querySelectorAll('.input-group'), {
+                    y: 20,
+                    opacity: 0,
+                    stagger: 0.1,
+                    duration: 0.5
+                });
+
+                this.currentSection = to;
+                this.updateProgress();
+            }
+
+            validateSection(section) {
+                const validators = {
+                    1: () => {
+                        const fields = ['name', 'email', 'phone'];
+                        return fields.every(id => {
+                            const input = document.getElementById(id);
+                            const value = input.value.trim();
+                            if (!value) {
+                                this.showNotification(`Please enter your ${id}`, 'error');
+                                input.focus();
+                                return false;
+                            }
+                            if (id === 'email' && !this.validateEmail(value)) {
+                                this.showNotification('Please enter a valid email', 'error');
+                                input.focus();
+                                return false;
+                            }
+                            if (id === 'phone' && !this.validatePhone(value)) {
+                                this.showNotification('Please enter a valid phone number', 'error');
+                                input.focus();
+                                return false;
+                            }
+                            return true;
+                        });
+                    },
+                    2: () => {
+                        const roles = document.querySelectorAll('.role-card.active');
+                        if (roles.length === 0) {
+                            this.showNotification('Please select at least one role', 'error');
+                            return false;
+                        }
+                        return true;
+                    },
+                    3: () => {
+                        // Section 3 has no required fields currently, so always valid
+                        return true;
+                    }
+                };
+                return validators[section]?.() ?? true;
+            }
+
+            validateEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            validatePhone(phone) {
+                return /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(phone);
+            }
+
+            renderRoleCards() {
+                const roles = [
+                    { id: 'food-prep', label: 'Food Prep', icon: 'fa-utensils', color: '#ff6b6b' },
+                    { id: 'cooking', label: 'Cooking', icon: 'fa-fire', color: '#ff9f43' },
+                    { id: 'serving', label: 'Serving', icon: 'fa-plate-wheat', color: '#00d2d3' },
+                    { id: 'cleanup', label: 'Cleanup', icon: 'fa-broom', color: '#54a0ff' },
+                    { id: 'delivery', label: 'Delivery', icon: 'fa-truck', color: '#5f27cd' },
+                    { id: 'inventory', label: 'Inventory', icon: 'fa-boxes-stacked', color: '#ff9ff3' }
+                ];
+                
+                const container = document.getElementById('roleCards');
+                roles.forEach(role => {
+                    const card = document.createElement('div');
+                    card.className = 'role-card';
+                    card.style.setProperty('--role-color', role.color);
+                    card.innerHTML = `
+                        <i class="fas ${role.icon}"></i>
+                        <span>${role.label}</span>
+                        <div class="role-hover-effect"></div>
+                        <input type="checkbox" name="roles" value="${role.id}" hidden>
+                    `;
+                    card.addEventListener('click', () => {
+                        card.classList.toggle('active');
+                        card.querySelector('input').checked = card.classList.contains('active');
+                        gsap.to(card, { scale: card.classList.contains('active') ? 1.05 : 1, duration: 0.2 });
+                    });
+                    container.appendChild(card);
+                });
+            }
+
+            setupDietaryChips() {
+                const chips = document.querySelectorAll('#dietaryChips .chip');
+                chips.forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        chip.classList.toggle('active');
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'dietary';
+                        input.value = chip.dataset.value;
+                        chip.classList.contains('active') ? 
+                            document.getElementById('volunteerForm').appendChild(input) :
+                            document.querySelector(`input[value="${chip.dataset.value}"]`)?.remove();
+                        gsap.to(chip, { scale: chip.classList.contains('active') ? 1.1 : 1, duration: 0.2 });
+                    });
+                });
+            }
+
+            renderAvailabilityCalendar() {
+                const container = document.getElementById('availabilityCalendar');
+                const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                const times = ['Morning', 'Afternoon', 'Evening'];
+                
+                const header = document.createElement('div');
+                header.className = 'cal-header';
+                header.innerHTML = '<div></div>' + times.map(time => `<div>${time}</div>`).join('');
+                container.appendChild(header);
+
+                days.forEach(day => {
+                    const row = document.createElement('div');
+                    row.className = 'cal-row';
+                    row.innerHTML = `<div class="day-label">${day}</div>`;
+                    times.forEach(time => {
+                        const cell = document.createElement('div');
+                        cell.className = 'cal-cell';
+                        cell.innerHTML = `
+                            <input type="checkbox" name="avail-${day.toLowerCase()}-${time.toLowerCase()}">
+                            <div class="cell-overlay"></div>
+                        `;
+                        cell.addEventListener('click', () => {
+                            cell.classList.toggle('selected');
+                            gsap.to(cell, { 
+                                scale: cell.classList.contains('selected') ? 1.05 : 1,
+                                duration: 0.2 
+                            });
+                        });
+                        row.appendChild(cell);
+                    });
+                    container.appendChild(row);
+                });
+            }
+
+            setupBackgroundParticles() {
+                const particles = document.querySelector('.backdrop-particles');
+                if (particles) {
+                    for (let i = 0; i < 20; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = `${Math.random() * 100}%`;
+                        particle.style.top = `${Math.random() * 100}%`;
+                        particle.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                        particles.appendChild(particle);
+                    }
+                }
+            }
+
+            // Modifications start here
+            async handleSubmit(e) {
+                e.preventDefault();
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.classList.add('loading');
+                
+                try {
+                    // Validate all sections before submission
+                    for (let i = 1; i <= 3; i++) {
+                        if (!this.validateSection(i)) {
+                            throw new Error(`Validation failed in section ${i}`);
+                        }
+                    }
+
+                    this.formData = this.collectFormData();
+
+                    // Check for duplicate email or phone
+                    const email = this.formData.personal.email;
+                    const phone = this.formData.personal.phone;
+
+                    if (this.registeredEmails.includes(email)) {
+                        throw new Error('This email is already registered. Please use a different email.');
+                    }
+                    if (this.registeredPhones.includes(phone)) {
+                        throw new Error('This phone number is already registered. Please use a different number.');
+                    }
+
+                    await this.simulateApiCall();
+                    await this.showSuccessAndReset(); // Proceed with success and reset
+                } catch (error) {
+                    console.error('Submission error:', error);
+                    this.showError(error.message || 'An unexpected error occurred. Please try again.');
+                } finally {
+                    submitBtn.classList.remove('loading');
+                }
+            }
+
+            collectFormData() {
+                const form = document.getElementById('volunteerForm');
+                const data = {
+                    personal: {},
+                    preferences: { roles: [], dietary: [], certifications: [] },
+                    availability: {}
+                };
+                
+                new FormData(form).forEach((value, key) => {
+                    if (key.startsWith('avail-')) {
+                        const [_, day, time] = key.split('-');
+                        data.availability[day] = data.availability[day] || {};
+                        data.availability[day][time] = true;
+                    } else if (key === 'roles') {
+                        data.preferences.roles.push(value);
+                    } else if (key === 'dietary') {
+                        data.preferences.dietary.push(value);
+                    } else if (key === 'certifications') {
+                        data.preferences.certifications = value.split('\n').filter(Boolean);
+                    } else {
+                        data.personal[key] = value;
+                    }
+                });
+                return data;
+            }
+
+            async simulateApiCall() {
+                // Simulate an API call with a delay
+                return new Promise((resolve) => {
+                    setTimeout(resolve, 1500);
+                });
+            }
+
+            showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                gsap.fromTo(notification, 
+                    { y: -50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.5 }
+                );
+                
+                setTimeout(() => {
+                    gsap.to(notification, {
+                        y: -50,
+                        opacity: 0,
+                        duration: 0.5,
+                        onComplete: () => notification.remove()
+                    });
+                }, 3000);
+            }
+
+            async showSuccessAndReset() {
+                const modal = document.getElementById('success-modal');
+                const details = document.querySelector('#success-modal .success-details');
+                const name = this.formData.personal.name || 'Volunteer';
+                
+                // Add the email and phone to registered lists
+                this.registeredEmails.push(this.formData.personal.email);
+                this.registeredPhones.push(this.formData.personal.phone);
+
+                // Updated success message with further information
+                details.textContent = `Thank you, ${name}! Your registration has been received. We'll contact you soon at ${this.formData.personal.email} with next steps. Please check your email for a confirmation and volunteer orientation details within 24 hours.`;
+                
+                modal.classList.remove('hidden');
+                this.launchCelebration();
+                
+                gsap.from('.modal-content.success', {
+                    scale: 0.8,
+                    opacity: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)'
+                });
+
+                // Automatically reset after 3 seconds
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                gsap.to('.modal-content.success', {
+                    scale: 0.8,
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: () => {
+                        modal.classList.add('hidden');
+                        document.getElementById('volunteerForm').reset();
+                        this.currentSection = 1;
+                        this.transitionSection(3, 1);
+                        document.querySelectorAll('.role-card, .chip, .cal-cell').forEach(el => {
+                            el.classList.remove('active', 'selected');
+                        });
+                    }
+                });
+            }
+
+            showError(message) {
+                const modal = document.getElementById('error-modal');
+                const details = document.querySelector('#error-modal .error-details');
+                
+                details.textContent = message;
+                modal.classList.remove('hidden');
+                
+                gsap.from('.modal-content.error', {
+                    scale: 0.8,
+                    opacity: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)'
+                });
+            }
+
+            launchCelebration() {
+                const canvas = document.getElementById('celebrationCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                
+                const particles = [];
+                for (let i = 0; i < 50; i++) {
+                    particles.push({
+                        x: canvas.width / 2,
+                        y: canvas.height / 2,
+                        radius: Math.random() * 4 + 1,
+                        color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+                        speed: Math.random() * 5 + 2,
+                        angle: Math.random() * Math.PI * 2
+                    });
+                }
+
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    particles.forEach((p, i) => {
+                        p.x += Math.cos(p.angle) * p.speed;
+                        p.y += Math.sin(p.angle) * p.speed;
+                        p.speed *= 0.96;
+                        
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                        
+                        if (p.speed < 0.1) particles.splice(i, 1);
+                    });
+                    
+                    if (particles.length > 0) requestAnimationFrame(animate);
+                }
+                
+                animate();
+            }
+        }
+
+        // Global functions referenced in HTML
+        function shareOnTwitter() {
+            const text = "I just registered as a Food Service Volunteer! Join me in making a difference through food!";
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function closeError() {
+            const modal = document.getElementById('error-modal');
+            gsap.to('.modal-content.error', {
+                scale: 0.8,
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => modal.classList.add('hidden')
+            });
+        }
+
+        // Initialize the form manager
+        const formManager = new VolunteerFormManager();
+    </script>
+</body>
+</html>

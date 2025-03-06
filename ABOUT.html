@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Food Bridge Network</title>
+    <meta name="description" content="Food Bridge Network connects surplus food from hotels, restaurants, and individuals to those in need. Join us in reducing food waste and feeding the hungry.">
+    <meta name="keywords" content="food donation, reduce food waste, feed the hungry, food bridge network, volunteer, donate food">
+    <meta name="author" content="Food Bridge Network">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        nav {
+            background: linear-gradient(135deg, #ff6f61, #ff9a44);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #ff6f61, #ff9a44);
+            color: #fff;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1950&q=80') no-repeat center/cover;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        header .logo {
+            font-size: 3.5rem;
+            font-weight: 700;
+            animation: fadeInDown 1s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        header .slogan {
+            font-size: 1.3rem;
+            margin-top: 15px;
+            animation: fadeInUp 1s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 20px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+        }
+
+        .about .container {
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .about .text {
+            flex: 1;
+            min-width: 300px;
+            animation: fadeInLeft 1s ease-in-out;
+        }
+
+        .about .text h2 {
+            font-size: 2.8rem;
+            color: #ff6f61;
+            margin-bottom: 20px;
+        }
+
+        .about .text p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .about .cta-button {
+            background: linear-gradient(135deg, #ff6f61, #ff9a44);
+            color: #fff;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .about .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 111, 97, 0.4);
+        }
+
+        .about .image {
+            flex: 1;
+            min-width: 300px;
+            animation: fadeInRight 1s ease-in-out;
+        }
+
+        .about .image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .about .image img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Mission Section */
+        .mission {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #f4f4f4, #e9ecef);
+            text-align: center;
+        }
+
+        .mission h2 {
+            font-size: 2.8rem;
+            color: #ff6f61;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .mission p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .mission .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .mission .stat-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 250px;
+        }
+
+        .mission .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .mission .stat-box i {
+            font-size: 2.8rem;
+            color: #ff6f61;
+            margin-bottom: 15px;
+        }
+
+        .mission .stat-box h3 {
+            font-size: 1.6rem;
+            color: #333;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 20px;
+            background: #fff;
+            text-align: center;
+        }
+
+        .how-it-works h2 {
+            font-size: 2.8rem;
+            color: #ff6f61;
+            margin-bottom: 40px;
+        }
+
+        .how-it-works .steps {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .how-it-works .step {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 15px;
+            width: 300px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .how-it-works .step:hover {
+            transform: scale(1.05);
+        }
+
+        .how-it-works .step i {
+            font-size: 2.5rem;
+            color: #ff6f61;
+            margin-bottom: 15px;
+        }
+
+        .how-it-works .step h3 {
+            font-size: 1.6rem;
+            color: #333;
+        }
+
+        /* Testimonial Carousel */
+        .testimonials {
+            padding: 100px 20px;
+            background: #f4f4f4;
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonials h2 {
+            font-size: 2.8rem;
+            color: #ff6f61;
+            margin-bottom: 40px;
+        }
+
+        .testimonial-container {
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .testimonial-slide {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .testimonial {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            min-width: 100%;
+            text-align: center;
+        }
+
+        .testimonial p:first-child {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .testimonial p:last-child {
+            font-weight: 600;
+            color: #ff6f61;
+        }
+
+        .carousel-controls {
+            margin-top: 20px;
+        }
+
+        .carousel-controls button {
+            background: #ff6f61;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .carousel-controls button:hover {
+            background: #ff9a44;
+        }
+
+        /* Impact Tracker */
+        .impact-tracker {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #ff6f61, #ff9a44);
+            color: #fff;
+            text-align: center;
+        }
+
+        .impact-tracker h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .impact-tracker .progress {
+            max-width: 600px;
+            margin: 20px auto;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .impact-tracker .progress-bar {
+            width: 0;
+            height: 100%;
+            background: #fff;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            color: #ffcc00;
+            margin-bottom: 15px;
+        }
+
+        .footer-section p, .footer-section a {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .footer-section a {
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #ffcc00;
+        }
+
+        .footer-social .social-icons a {
+            font-size: 1.8rem;
+            margin: 0 10px;
+            color: #ffcc00;
+        }
+
+        .footer-social .social-icons a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav .nav-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            nav .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            header {
+                padding: 60px 20px;
+            }
+
+            .about .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .mission .stats, .how-it-works .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Food Bridge</a>
+            <div class="nav-links">
+                <a href="footer.html">Home</a>
+                <a href="#about" class="active">About Us</a>
+                <a href="#mission">Mission</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#testimonials">Testimonials</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <h1 class="logo">Food Bridge Network</h1>
+        <p class="slogan">"Connecting surplus food to those in need, one meal at a time."</p>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="text">
+                <h2>Who We Are</h2>
+                <p>Food Bridge Network is a revolutionary platform dedicated to reducing food waste and combating hunger. We connect surplus food from hotels, restaurants, and individuals to communities in need through a seamless, technology-driven network.</p>
+                <button class="cta-button" aria-label="Join Us" onclick="joinUs()">Join Us</button>
+            </div>
+            <div class="image">
+                <img src="https://thumbs.dreamstime.com/b/volunteers-give-food-to-needy-people-share-food-to-reduce-starvation-volunteers-give-food-to-needy-people-share-food-to-reduce-175576440.jpg" alt="Volunteers distributing food">
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="mission">
+        <h2>Our Mission</h2>
+        <p>"Bridging the gap between excess and need through compassion and innovation."</p>
+        <div class="stats">
+            <div class="stat-box">
+                <i class="fas fa-utensils"></i>
+                <h3><span id="mealsCounter">0</span> Meals Served</h3>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-hands-helping"></i>
+                <h3><span id="volunteersCounter">0</span> Volunteers</h3>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-hotel"></i>
+                <h3><span id="partnersCounter">0</span> Partners</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <i class="fas fa-donate"></i>
+                <h3>Donate Food</h3>
+                <p>Hotels and individuals register surplus food on our platform.</p>
+            </div>
+            <div class="step">
+                <i class="fas fa-truck"></i>
+                <h3>Collect & Deliver</h3>
+                <p>Volunteers pick up and distribute food efficiently.</p>
+            </div>
+            <div class="step">
+                <i class="fas fa-utensils"></i>
+                <h3>Feed Communities</h3>
+                <p>Surplus food reaches those in need, reducing waste.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <h2>Success Stories</h2>
+        <div class="testimonial-container">
+            <div class="testimonial-slide" id="testimonialSlide">
+                <div class="testimonial">
+                    <p>"Food Bridge helped us feed 100+ families last month!"</p>
+                    <p>- Community Center</p>
+                </div>
+                <div class="testimonial">
+                    <p>"Donating surplus food has never been easier."</p>
+                    <p>- Partner Hotel</p>
+                </div>
+                <div class="testimonial">
+                    <p>"A game-changer in fighting hunger!"</p>
+                    <p>- Volunteer</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <button id="prevTestimonial" aria-label="Previous Testimonial">Prev</button>
+            <button id="nextTestimonial" aria-label="Next Testimonial">Next</button>
+        </div>
+    </section>
+
+    <!-- Impact Tracker -->
+    <section class="impact-tracker">
+        <h2>Our Impact</h2>
+        <p>Total Food Donated: <span id="foodDonated">0</span> kg</p>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section footer-about">
+                <h3>Food Bridge</h3>
+                <p>Ending hunger through innovation and compassion.</p>
+            </div>
+            <div class="footer-section footer-links">
+                <h3>Quick Links</h3>
+                <p><a href="footer.html">Home</a></p>
+                <p><a href="#about">About</a></p>
+                <p><a href="#mission">Mission</a></p>
+                <p><a href="#how-it-works">How It Works</a></p>
+            </div>
+            <div class="footer-section footer-contact">
+                <h3>Contact Us</h3>
+                <p>Email: support@foodbridge.org</p>
+                <p>Phone: +91 98765 43210</p>
+            </div>
+            <div class="footer-section footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Food Bridge Network. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Smooth Counter Animation
+            function animateCounter(id, start, end, duration) {
+                const element = document.getElementById(id);
+                let current = start;
+                const range = end - start;
+                const increment = end > start ? 1 : -1;
+                const stepTime = Math.abs(Math.floor(duration / range));
+                const timer = setInterval(() => {
+                    current += increment;
+                    element.textContent = current;
+                    if (current === end) clearInterval(timer);
+                }, stepTime);
+            }
+
+            // Intersection Observer for Animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.id === "mission") {
+                            animateCounter("mealsCounter", 0, 2500, 2000);
+                            animateCounter("volunteersCounter", 0, 800, 2000);
+                            animateCounter("partnersCounter", 0, 300, 2000);
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll("section").forEach(section => observer.observe(section));
+
+            // Testimonial Carousel
+            const slide = document.getElementById("testimonialSlide");
+            const testimonials = slide.children;
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                slide.style.transform = `translateX(${-currentIndex * 100}%)`;
+            }
+
+            document.getElementById("nextTestimonial").addEventListener("click", () => {
+                currentIndex = (currentIndex + 1) % testimonials.length;
+                updateCarousel();
+            });
+
+            document.getElementById("prevTestimonial").addEventListener("click", () => {
+                currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+                updateCarousel();
+            });
+
+            let autoPlay = setInterval(() => {
+                currentIndex = (currentIndex + 1) % testimonials.length;
+                updateCarousel();
+            }, 4000);
+
+            slide.addEventListener("mouseenter", () => clearInterval(autoPlay));
+            slide.addEventListener("mouseleave", () => {
+                autoPlay = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % testimonials.length;
+                    updateCarousel();
+                }, 4000);
+            });
+
+            // Impact Tracker
+            let foodDonated = 0;
+            const foodElement = document.getElementById("foodDonated");
+            const progressBar = document.getElementById("progressBar");
+
+            function updateImpact() {
+                foodDonated += Math.random() * 10;
+                foodElement.textContent = foodDonated.toFixed(1);
+                progressBar.style.width = `${Math.min((foodDonated / 5000) * 100, 100)}%`;
+                if (foodDonated >= 1000 && foodDonated < 1010) {
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                }
+            }
+
+            setInterval(updateImpact, 5000);
+            updateImpact();
+
+            // Join Us Button
+            window.joinUs = () => {
+                alert("Thank you for your interest! Sign up functionality coming soon.");
+            };
+
+            // Parallax Effect for Header
+            window.addEventListener("scroll", () => {
+                const scrollPos = window.scrollY;
+                header.style.backgroundPositionY = `${scrollPos * 0.3}px`;
+            });
+        });
+    </script>
+</body>
+</html>

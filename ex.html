@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Verification - Food Bridge Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+   <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #4a90e2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/subtle-white-feathers.png');
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a90e2;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2a5298;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .header img {
+            height: 40px;
+            margin-right: 1rem;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .verification-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 480px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 2rem 0;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1.2s ease-in-out;
+            transition: transform 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            animation: slideIn 1s ease-in-out;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-in-out;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.7rem;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        label i {
+            margin-right: 8px;
+            color: #4a90e2;
+        }
+
+        label::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        label:hover::after {
+            opacity: 1;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2);
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.7);
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        input[type="file"] {
+            padding: 0.7rem;
+            cursor: pointer;
+        }
+
+        small {
+            display: block;
+            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .otp-btn, .submit-btn {
+            background: linear-gradient(135deg, #4a90e2, #1e3c72);
+            color: #fff;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+            box-shadow: 0 5px 20px rgba(74, 144, 226, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .otp-btn::after, .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .otp-btn:hover::after, .submit-btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .otp-btn:hover, .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.6);
+        }
+
+        #statusMessage {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            padding: 0.7rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #statusMessage span {
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            animation: pulse 2s infinite;
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #1e7e34, #28a745);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(74, 144, 226, 0.5));
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out, sparkle 2s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0.9; }
+            50% { transform: translateY(-150vh) translateX(30px); opacity: 0.5; }
+            100% { transform: translateY(0) translateX(0); opacity: 0.9; }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        .progress-bar {
+            display: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-bar span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: #4a90e2;
+            animation: load 2s infinite;
+        }
+
+        @keyframes load {
+            0% { width: 0; }
+            50% { width: 100%; }
+            100% { width: 0; }
+        }
+
+        .footer {
+            padding: 1.5rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .footer a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Background Video (optional, uncomment to enable) */
+        /*
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        */
+    </style>
+</head>
+<body>
+    <!-- Optional Background Video (uncomment to enable) -->
+    <!--
+    <video autoplay muted loop id="bg-video">
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+    -->
+    <div class="particles">
+        <div class="particle" style="width: 12px; height: 12px; left: 10%; top: 10%; animation-delay: 0s; background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 107, 107, 0.5));"></div>
+        <div class="particle" style="width: 8px; height: 8px; left: 20%; top: 30%; animation-delay: 1s;"></div>
+        <div class="particle" style="width: 15px; height: 15px; left: 35%; top: 50%; animation-delay: 2s; background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(88, 214, 141, 0.5));"></div>
+        <div class="particle" style="width: 10px; height: 10px; left: 50%; top: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="width: 14px; height: 14px; left: 65%; top: 20%; animation-delay: 4s; background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 190, 107, 0.5));"></div>
+        <div class="particle" style="width: 9px; height: 9px; left: 80%; top: 40%; animation-delay: 5s;"></div>
+        <div class="particle" style="width: 11px; height: 11px; left: 90%; top: 60%; animation-delay: 6s; background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(155, 89, 182, 0.5));"></div>
+    </div>
+    <div class="header">
+        <img src="fa-solid fa-utensils logo-icon" alt="Food Bridge Logo">
+        <h1>Food Bridge Network</h1>
+    </div>
+    <div class="verification-container" data-tilt data-tilt-glare data-tilt-max-glare="0.5">
+        <h2>Verify Your Organization</h2>
+        <form id="verificationForm">
+            <div class="form-group">
+                <label for="orgName" data-tooltip="Enter the full name of your organization"><i class="fas fa-building"></i> Organization Name:</label>
+                <input type="text" id="orgName" placeholder="Enter your organization name" required>
+            </div>
+            <div class="form-group">
+                <label for="regNumber" data-tooltip="Provide your official registration number or Aadhar"><i class="fas fa-id-card"></i> Registration Number:</label>
+                <input type="text" id="regNumber" placeholder="Enter registration number or Aadhar" required>
+            </div>
+            <div class="form-group">
+                <label for="idProof" data-tooltip="Upload a valid ID proof document"><i class="fas fa-file-upload"></i> Upload ID Proof:</label>
+                <input type="file" id="idProof" accept=".pdf,.jpg,.png" required>
+                <small>Accepted formats: PDF, JPG, PNG (Max size: 5MB)</small>
+            </div>
+            <div class="form-group">
+                <label for="contact" data-tooltip="Enter your phone number or email for OTP"><i class="fas fa-envelope"></i> Phone Number / Email:</label>
+                <input type="text" id="contact" placeholder="Enter phone number or email" required>
+                <button type="button" class="otp-btn" onclick="sendOTP()">Send OTP</button>
+            </div>
+            <div id="otpSection" class="form-group" style="display: none;">
+                <label for="otpInput" data-tooltip="Enter the 6-digit OTP you received"><i class="fas fa-key"></i> Enter OTP:</label>
+                <input type="text" id="otpInput" placeholder="Enter OTP" required>
+                <button type="button" class="otp-btn" onclick="verifyOTP()">Verify</button>
+            </div>
+            <p id="statusMessage"></p>
+            <div class="progress-bar" id="progressBar"><span></span></div>
+            <button type="submit" id="submitBtn" class="submit-btn" style="display: none;">Submit & Proceed</button>
+        </form>
+    </div>
+    <div class="footer">
+        Powered by <a href="#">Food Bridge Network</a> © 2025
+    </div>
+    <script>
+        let generatedOTP;
+
+        function sendOTP() {
+            const contact = document.getElementById("contact").value.trim();
+            if (!contact) {
+                alert("Please enter your phone number or email.");
+                return;
+            }
+            generatedOTP = Math.floor(100000 + Math.random() * 900000);
+            alert(`Your OTP is: ${generatedOTP}`);
+            document.getElementById("otpSection").style.display = "block";
+            document.getElementById("statusMessage").innerHTML = "<span style='color: #4a90e2;'>OTP sent! Check your phone/email.</span>";
+            document.getElementById("progressBar").style.display = "block";
+            setTimeout(() => document.getElementById("progressBar").style.display = "none", 2000);
+        }
+
+        function verifyOTP() {
+            const enteredOTP = document.getElementById("otpInput").value.trim();
+            if (!enteredOTP) {
+                alert("Please enter the OTP.");
+                return;
+            }
+            document.getElementById("progressBar").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("progressBar").style.display = "none";
+                if (enteredOTP == generatedOTP) {
+                    document.getElementById("statusMessage").innerHTML = "<span style='color: #28a745;'>✅ Verification Successful!</span>";
+                    document.getElementById("submitBtn").style.display = "block";
+                } else {
+                    document.getElementById("statusMessage").innerHTML = "<span style='color: #e74c3c;'>❌ Incorrect OTP. Try again.</span>";
+                }
+            }, 1000);
+        }
+
+        document.getElementById("verificationForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const orgName = document.getElementById("orgName").value.trim();
+            const regNumber = document.getElementById("regNumber").value.trim();
+            const idProof = document.getElementById("idProof").files[0];
+            const contact = document.getElementById("contact").value.trim();
+            if (!orgName || !regNumber || !idProof || !contact) {
+                alert("Please fill out all fields.");
+                return;
+            }
+            document.getElementById("progressBar").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("progressBar").style.display = "none";
+                alert("Form submitted successfully!");
+            }, 1500);
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            window.location.href = 'KL.HTML';
+        });
+
+        // Initialize Vanilla Tilt
+        VanillaTilt.init(document.querySelector(".verification-container"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.5,
+        });
+    </script>
+</body>
+</html>

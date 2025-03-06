@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodBridge</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.7rem 5%;
+            background: rgba(255, 65, 108, 0.95);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: #FFD700;
+            padding: 8px;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(20deg);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 10px;
+            display: block;
+        }
+
+        .nav-links a:not(.login-btn)::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFD700;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.login-btn):hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(255, 65, 108, 0.95);
+            min-width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown li {
+            list-style: none;
+            width: 100%;
+        }
+
+        .dropdown a {
+            padding: 12px 16px;
+            display: block;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-links li:hover .dropdown {
+            display: block;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: #FFD700;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background: white;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            background: #FF416C;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        /* Active Link Styling */
+        .nav-links a.active {
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        @media screen and (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: rgba(255, 65, 108, 0.95);
+                padding: 1rem 0;
+                gap: 0.5rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .dropdown {
+                position: static;
+                display: none;
+                background: none;
+                box-shadow: none;
+            }
+
+            .nav-links li:hover .dropdown {
+                display: block;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .primary-btn {
+            background: #FFD700;
+            color: #FF416C;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid #FFD700;
+            color: #FFD700;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #FFD700;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 20px;
+            background: white;
+            text-align: center;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #FF416C;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 40px 0 20px;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            gap: 20px;
+        }
+
+        .footer-about, .footer-links, .footer-contact, .footer-social, .whatsapp-chat {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer h2 {
+            font-size: 24px;
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .footer h3 {
+            font-size: 18px;
+            color: #ffcc00;
+            margin-bottom: 15px;
+        }
+
+        .footer p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer ul li a:hover {
+            color: #ffcc00;
+        }
+
+        .footer-social .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .footer-social .social-icons a {
+            color: #ffcc00;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social .social-icons a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-chat {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background-color: #25D366;
+            color: #fff !important;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+
+        .trust-text {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 15px;
+            border-top: 1px solid #444;
+            padding-top: 10px;
+        }
+        /* Stats Container */
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    background-color: #f8f9fa;  /* Light gray background */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+/* Each Stat Item */
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Number Styling */
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color:  #FF416C; /* Blue */
+}
+
+/* Label Styling */
+.stat-label {
+    font-size: 1rem;
+    color:  #FF416C;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <a href="#" class="logo" aria-label="FoodBridge Home">
+            <i class="fas fa-hand-holding-heart logo-icon" aria-hidden="true"></i>
+            <span class="logo-text">FoodBridge</span>
+        </a>
+        <ul class="nav-links" role="menubar">
+            <li role="none"><a href="#" role="menuitem"><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+            <li role="none">
+                <a href="donate.html" role="menuitem"><i class="fas fa-bowl-food" aria-hidden="true"></i>Donate Food 🍲</a>
+                <ul class="dropdown" role="menu">
+                    <li role="none"><a href="donate.html" role="menuitem">Cooked Food</a></li>
+                    <li role="none"><a href="donate.html" role="menuitem">Raw Food</a></li>
+                    <li role="none"><a href="donate.html" role="menuitem">Leftover Food</a></li>
+                </ul>
+            </li>
+            <li role="none">
+                <a href="ex.html" role="menuitem"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Request Food 🤲</a>
+                <ul class="dropdown" role="menu">
+                    <li role="none"><a href="ex.html" role="menuitem">For Orphanages</a></li>
+                    <li role="none"><a href="ex.html" role="menuitem">For Old Age Homes</a></li>
+                    <li role="none"><a href="ex.html" role="menuitem">For Homeless</a></li>
+                </ul>
+            </li>
+            <li role="none">
+                <a href="practy.html" role="menuitem"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Annadanam Events 📅</a>
+                <ul class="dropdown" role="menu">
+                    <li role="none"><a href="practy.html" role="menuitem">Upcoming Events</a></li>
+                    <li role="none"><a href="practy.html" role="menuitem">Volunteer</a></li>
+                    <li role="none"><a href="practy.html" role="menuitem">Host an Event</a></li>
+                </ul>
+            </li>
+            <li role="none">
+                <a href="support.html" role="menuitem"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> SUPPORT HUB 📍</a>
+                <ul class="dropdown" role="menu">
+                    <li role="none"><a href="support.html" role="menuitem"></a></li>
+                    
+                </ul>
+            </li>
+            <!-- Search Bar -->
+            <li role="none">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search..." aria-label="Search">
+                    <button aria-label="Search Button"><i class="fas fa-search"></i></button>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Fighting Hunger, Building Bridges</h1>
+            <p>Connect with local communities to share surplus food and make a difference in someone's life today.</p>
+            <div class="cta-buttons">
+                <a href="donate.html" class="cta-btn primary-btn">Donate Food</a>
+                <a href="#" class="cta-btn secondary-btn">Request Food</a>
+            </div>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-number" id="mealsDonated">0</span>
+                    <p class="stat-label">Meals Donated</p>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="activeVolunteers">0</span>
+                    <p class="stat-label">Active Volunteers</p>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="citiesCovered">0</span>
+                    <p class="stat-label">Cities Covered</p>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+   
+    
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-title">
+            <h2>How It Works</h2>
+            <p>Join our mission to reduce food waste and help those in need through our simple and efficient process.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-hand-holding-heart feature-icon"></i>
+                <a href="donate.html" style="text-decoration: none;color: #1a1a1a;"><h3>Donate Surplus Food</h3></a>
+                <p>Share your excess food with those who need it most. Every donation makes a difference.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-truck feature-icon"></i>
+                <h3>Quick Pickup</h3>
+                <p>Our volunteers will collect the food from your location and ensure it reaches the right people.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-map-marked-alt feature-icon"></i>
+                <h3>Track Impact</h3>
+                <p>Monitor your contributions and see the real impact you're making in your community.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-users feature-icon"></i>
+                <a href="op.html" style="text-decoration: none;color: #1a1a1a;"><h3>Community Events</h3></a>
+                <p>Join our Annadanam events and help serve fresh meals to those in need.</p>
+            </div>
+        </div>
+        
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Branding & About -->
+            <div class="footer-about">
+                <h2>FoodConnect</h2>
+                <p>Bridging surplus food to those in need. Together, we can end hunger.</p>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">CONTACT US</a></li>
+                    <li><a href="donate.html">Donate Food</a></li>
+                    <li><a href="ex.html">Request Food</a></li>
+                    <li><a href="ABOUT.HTML">ABOUT US</a></li>
+                    <li><a href="CHAT.HTML">CHAT WITH OUR BOT</a></li>
+                    <li><a href="privacy.html">PRIVACY POLICY</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p>Email: support@foodconnect.com</p>
+                <p>Phone: +91 98765 43210</p>
+                <p>Location: Hyderabad, India</p>
+            </div>
+            
+            <!-- Social Media Links -->
+            <div class="footer-social">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <!-- WhatsApp Button -->
+            <div class="whatsapp-chat">
+                <a href="https://wa.me/919876543210" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> WHASTAPP CHAT
+                </a>
+                <BR>
+                <H4>CHAT WITH US </H2>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 FoodConnect. All Rights Reserved.</p>
+            <p class="trust-text">Partnered with 50+ NGOs across India</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Toggle Mobile Menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close Mobile Menu When Clicking Outside
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Animate Stats Numbers
+        const animateValue = (element, start, end, duration) => {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const current = Math.floor(progress * (end - start) + start);
+                element.textContent = current.toLocaleString() + '+';
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        };
+
+        // Intersection Observer for Stats Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statsElements = document.querySelectorAll('.stat-number');
+                    statsElements.forEach(stat => {
+                        const finalValue = parseInt(stat.textContent);
+                        animateValue(stat, 0, finalValue, 2000);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(document.querySelector('.stats-container'));
+
+
+
+
+        
+document.addEventListener("DOMContentLoaded", function () {
+    function animateCounter(id, start, end, duration) {
+        let element = document.getElementById(id);
+        if (!element) return; // Prevent errors if the element is missing
+
+        let range = end - start;
+        let increment = range / (duration / 16); // Adjust for smoother animation
+        let current = start;
+        let stepTime = Math.abs(Math.floor(duration / range));
+
+        let timer = setInterval(() => {
+            current += increment;
+            element.innerText = Math.floor(current);
+
+            if (current >= end) {
+                element.innerText = end;
+                clearInterval(timer);
+            }
+        }, stepTime);
+    }
+
+    // Start the counters
+    animateCounter("mealsDonated", 0, 50000, 3000);   // 3 seconds
+    animateCounter("activeVolunteers", 0, 1200, 2500); // 2.5 seconds
+    animateCounter("citiesCovered", 0, 50, 2000);      // 2 seconds
+});
+</script>
+</body>
+</html>

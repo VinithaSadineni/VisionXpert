@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Food Request | Food Relief Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Navbar Styles */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .logo h1 {
+            color: #ff416c;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin-left: 25px;
+        }
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links a:hover {
+            color: #ff416c;
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .hero-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 5px solid #ff416c;
+            background-color: #f0f0f0; /* Fallback color */
+        }
+        h2 {
+            color: #ff416c;
+            margin: 25px 0 15px;
+            font-size: 2em;
+            text-align: center;
+        }
+        .form-content {
+            padding: 0 30px 30px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #555;
+            font-weight: 500;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #ff416c;
+            outline: none;
+        }
+        .error {
+            color: #ff416c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .location-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .geo-btn {
+            position: absolute;
+            right: 10px;
+            top: 62%;
+            transform: translateY(-50%);
+            background: #ff416c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+        .geo-btn:hover {
+            background: #e02e5a;
+        }
+        button[type="submit"] {
+            background: #ff416c;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: 25px;
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background: #e02e5a;
+            transform: translateY(-2px);
+        }
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff416c;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        .success-message {
+            display: none;
+            color: #4CAF50;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .required::after {
+            content: "*";
+            color: #ff416c;
+            margin-left: 4px;
+        }
+        .help-text {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-top: 15px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        /* Footer Styles */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 40px 20px;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        .footer-section h3 {
+            color: #ff9a9e;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        .footer-section p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        .footer-section ul {
+            list-style: none;
+        }
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        .footer-section ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .footer-section ul li a:hover {
+            color: #ff9a9e;
+        }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .social-links a {
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            background-color: #444;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        .social-links a:hover {
+            background-color: #ff416c;
+            transform: translateY(-3px);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 15px 0;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 15px;
+            }
+            h2 {
+                font-size: 1.7em;
+            }
+            .form-content {
+                padding: 0 20px 20px;
+            }
+            .geo-btn {
+                font-size: 11px;
+                padding: 7px 10px;
+            }
+            .navbar {
+                padding: 15px;
+            }
+            .logo h1 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff416c'/%3E%3Cpath d='M30 40 L50 25 L70 40 L70 70 L30 70 Z' fill='white'/%3E%3Ccircle cx='50' cy='45' r='10' fill='%23ff9a9e'/%3E%3C/svg%3E" alt="Food Relief Logo">
+            <h1>Food Relief Network</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="footer.html">Home</a></li>
+            <li><a href="ABOUT.HTML">About Us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="donate.html">Donate</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <button class="mobile-menu-btn">☰</button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="container">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='250' viewBox='0 0 800 250'%3E%3Crect width='800' height='250' fill='%23f5f5f5'/%3E%3Cpath d='M0 180 Q200 120 400 180 Q600 240 800 180 L800 250 L0 250 Z' fill='%234682B4'/%3E%3Ccircle cx='620' cy='80' r='40' fill='%23FFD700'/%3E%3Cpath d='M150 250 L150 130 Q150 110 170 110 L230 110 Q250 110 250 130 L250 250 Z' fill='%23964B00'/%3E%3Crect x='130' y='130' width='140' height='20' rx='10' fill='%23723700'/%3E%3Cpath d='M300 250 L300 150 Q300 130 320 130 L380 130 Q400 130 400 150 L400 250 Z' fill='%23964B00'/%3E%3Crect x='280' y='150' width='140' height='20' rx='10' fill='%23723700'/%3E%3Ccircle cx='200' cy='170' r='50' fill='%231E90FF'/%3E%3Ccircle cx='350' cy='190' r='40' fill='%233CB371'/%3E%3Cpath d='M500 150 Q520 120 540 150 L560 190 L480 190 Z' fill='%23FF6347'/%3E%3Crect x='460' y='180' width='120' height='70' rx='10' fill='%23FFFFFF'/%3E%3Crect x='480' y='200' width='80' height='15' rx='5' fill='%23FF6347'/%3E%3Crect x='480' y='220' width='80' height='15' rx='5' fill='%23FF6347'/%3E%3C/svg%3E" class="hero-image" alt="Food Assistance">
+            <div class="form-content">
+                <h2>Food Request</h2>
+                <form id="foodForm">
+                    <div class="form-group">
+                        <label for="name" class="required">Full Name</label>
+                        <input type="text" id="name" required>
+                        <div class="error" id="nameError">Please enter your full name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="required">Phone Number</label>
+                        <input type="tel" id="phone" pattern="[0-9]{10}" required>
+                        <div class="error" id="phoneError">Please enter a valid 10-digit phone number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address (optional)</label>
+                        <input type="email" id="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emergencyType" class="required">Request Type</label>
+                        <select id="emergencyType" required>
+                            <option value="">Select FOODREQUEST Type</option>
+                            <option value="Homeless">HOMELESS</option>
+                            
+                            <option value="Family Crisis">FOR OLDAGE HOMES</option>
+                            <option value="for orphans">ORPHANAGES</option>
+                            
+                            <option value="Others">Others</option>
+                        </select>
+                        <div class="error" id="emergencyError">Please select an emergency type</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="familySize" class="required">Number of People in Need</label>
+                        <input type="number" id="familySize" min="1" max="30" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="needs">Dietary Restrictions or Special Needs (optional)</label>
+                        <textarea id="needs" rows="3"></textarea>
+                    </div>
+
+                    <div class="location-wrapper">
+                        <label for="location" class="required">Location</label>
+                        <input type="text" id="location" required>
+                        <button type="button" class="geo-btn" onclick="getLocation()">Use Current Location</button>
+                        <div class="error" id="locationError">Please provide your location</div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="urgent" name="urgent">
+                        <label for="urgent">This is an urgent request (less than 24 hours)</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent" name="consent" required>
+                        <label for="consent" class="required">I consent to the use of my information to process this request</label>
+                        <div class="error" id="consentError">You must consent to continue</div>
+                    </div>
+
+                    <button type="submit">Request Food Assistance</button>
+                </form>
+                <div class="loader"></div>
+                <div class="success-message">
+                    <p>Food request submitted successfully!</p>
+                    <p>Help is on the way. You will receive a confirmation via your provided contact method shortly.</p>
+                    <p>Request ID: <span id="requestId"></span></p>
+                </div>
+                <p class="help-text">For immediate assistance, please call our hotline: <strong>1-800-FOOD-HELP</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Food Relief Network is dedicated to providing emergency food assistance to those in need. We work tirelessly to ensure no one goes hungry in our communities.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Emergency Services</a></li>
+                    <li><a href="#">Volunteer</a></li>
+                    <li><a href="#">Donate Food</a></li>
+                    <li><a href="#">Our Partners</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>123 Helping Hand Street</p>
+                <p>Compassion City, State 12345</p>
+                <p>Email: help@foodrelief.org</p>
+                <p>Phone: 1-800-FOOD-HELP</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">f</a>
+                    <a href="#" aria-label="Twitter">t</a>
+                    <a href="#" aria-label="Instagram">i</a>
+                    <a href="#" aria-label="LinkedIn">in</a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Food Relief Network. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const form = document.getElementById('foodForm');
+        const loader = document.querySelector('.loader');
+        const successMessage = document.querySelector('.success-message');
+        const nameInput = document.getElementById('name');
+        const phoneInput = document.getElementById('phone');
+        const locationInput = document.getElementById('location');
+        const emergencyInput = document.getElementById('emergencyType');
+        const consentCheckbox = document.getElementById('consent');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            
+            // Reset all errors
+            document.querySelectorAll('.error').forEach(err => err.style.display = 'none');
+            
+            if (!nameInput.value.trim()) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!phoneInput.value.match(/^\d{10}$/)) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!emergencyInput.value) {
+                document.getElementById('emergencyError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!locationInput.value.trim()) {
+                document.getElementById('locationError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!consentCheckbox.checked) {
+                document.getElementById('consentError').style.display = 'block';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!validateForm()) return;
+            
+            // Generate a random request ID
+            const requestId = Math.random().toString(36).substring(2, 12).toUpperCase();
+            document.getElementById('requestId').textContent = requestId;
+            
+            // Show loader
+            form.style.display = 'none';
+            loader.style.display = 'block';
+            
+            // Simulate API call
+            setTimeout(() => {
+                loader.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Store request in localStorage for demo purposes
+                const requestData = {
+                    id: requestId,
+                    name: nameInput.value,
+                    phone: phoneInput.value,
+                    email: document.getElementById('email').value,
+                    emergencyType: emergencyInput.value,
+                    familySize: document.getElementById('familySize').value,
+                    needs: document.getElementById('needs').value,
+                    location: locationInput.value,
+                    urgent: document.getElementById('urgent').checked,
+                    timestamp: new Date().toISOString()
+                };
+                
+                try {
+                    const savedRequests = JSON.parse(localStorage.getItem('foodRequests')) || [];
+                    savedRequests.push(requestData);
+                    localStorage.setItem('foodRequests', JSON.stringify(savedRequests));
+                } catch (error) {
+                    console.error('Error saving request:', error);
+                }
+                
+                // Reset form after 5 seconds
+                setTimeout(() => {
+                    form.reset();
+                    successMessage.style.display = 'none';
+                    form.style.display = 'block';
+                }, 5000);
+            }, 2000);
+        });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            locationInput.value = `Lat: ${position.coords.latitude.toFixed(6)}, Long: ${position.coords.longitude.toFixed(6)}`;
+        }
+
+        function showError(error) {
+            let errorMessage;
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "User denied the request for geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMessage = "An unknown error occurred.";
+                    break;
+            }
+            alert(`Error getting location: ${errorMessage}`);
+        }
+
+        // Phone number validation
+        phoneInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+        });
+
+        // Enable form field validation on blur
+        nameInput.addEventListener('blur', () => {
+            if (!nameInput.value.trim()) {
+                document.getElementById('nameError').style.display = 'block';
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+        });
+        
+        phoneInput.addEventListener('blur', () => {
+            if (!phoneInput.value.match(/^\d{10}$/)) {
+                document.getElementById('phoneError').style.display = 'block';
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+        });
+        
+        locationInput.addEventListener('blur', () => {
+            if (!locationInput.value.trim()) {
+                document.getElementById('locationError').style.display = 'block';
+            } else {
+                document.getElementById('locationError').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
